@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from logging import getLogger
 from typing import List, Type, TypeVar
 from packaging.tags import PythonVersion
 
@@ -15,6 +16,7 @@ from .packages import (
     LocalDistribution
 )
 
+logger = getLogger(__name__)
 
 P = TypeVar('P', bound=BasePackage)
 
@@ -48,14 +50,14 @@ class AutoExplorer(BaseExplorer):
         ]
 
         if filtered:
-            self.log.debug(
+            logger.debug(
                 "Some dependency packages were classified as local but filtered due "
                 "to explicit value of additional_pypi_packages: %s",
                 filtered
             )
 
         if binary:
-            self.log.warning(
+            logger.warning(
                 "Some dependency packages were classified as local but they "
                 "contain a binary files; these packages wouldn't be transferred to a remote "
                 "host. If you need these packages, specify it explicitly "
@@ -64,7 +66,7 @@ class AutoExplorer(BaseExplorer):
             )
 
         if packages_with_bad_paths:
-            self.log.warning(
+            logger.warning(
                 "Some dependency packages were classified as local but they "
                 "contain files with non-standard paths; these paths wouldn't be transferred to "
                 "a remote host, but packages will be transferred without it. "
@@ -74,7 +76,7 @@ class AutoExplorer(BaseExplorer):
             )
 
         if nonbinary:
-            self.log.debug(
+            logger.debug(
                 "Next dependency packages were classified as local packages "
                 "and will be transfered to a remote host: %s",
                 nonbinary
@@ -100,14 +102,14 @@ class AutoExplorer(BaseExplorer):
             array.append(package)
 
         if overrided:
-            self.log.debug(
+            logger.debug(
                 "Next dependency packages were classified as pypi packages "
                 "but were overrided by additional_pypi_packages option: %s",
                 overrided
             )
 
         if bad_platform:
-            self.log.warning(
+            logger.warning(
                 "Next dependency packages were classified as pypi packages "
                 "but doesn't exist for Lzy server platform linux_x86_64 and requested "
                 "python version %s "
@@ -137,7 +139,7 @@ class AutoExplorer(BaseExplorer):
         packages = classifier.classify(modules)
         broken = [p for p in packages if isinstance(p, BrokenModules)]
         if broken:
-            self.log.warning(
+            logger.warning(
                 'while exploring local environment we failed to classify some modules '
                 'so these moduels will be omitted: %s', broken
             )

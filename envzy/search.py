@@ -4,17 +4,17 @@ import inspect
 import functools
 import sys
 import warnings
+from logging import getLogger
 from typing import Dict, Any, Set, FrozenSet, List, Tuple, Optional, Iterable, Iterator
 from types import ModuleType
 
-from lzy.logs.config import get_logger
 from .utils import getmembers, get_stdlib_module_names, get_builtin_module_names, is_lazy_module
 
 ModulesSet = Set[ModuleType]
 ModulesFrozenSet = FrozenSet[ModuleType]
 VarsNamespace = Dict[str, Any]
 
-logger = get_logger(__name__)
+logger = getLogger(__name__)
 
 
 def get_transitive_namespace_dependencies(namespace: VarsNamespace, include_parents: bool = True) -> ModulesFrozenSet:
