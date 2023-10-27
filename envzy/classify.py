@@ -12,7 +12,7 @@ from importlib_metadata import Distribution
 from typing_extensions import assert_never
 from packaging.tags import PythonVersion
 
-from lzy.utils.pypi import (
+from .pypi import (
     check_package_version_exists,
     check_package_version_exists_on_target_platform,
 )
@@ -267,7 +267,7 @@ class ModuleClassifier:
             # package var must include PypiDistribution | LocalDistribution
             # so this will never assert
             if not isinstance(package, LocalDistribution):
-                assert_never()
+                assert_never(package)
 
             # XXX: All code below is needed for theoretical
             # edge cases and could be safely removed:

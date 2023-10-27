@@ -8,6 +8,7 @@ from collections import defaultdict
 from functools import lru_cache
 from inspect import isclass, getmro
 from pathlib import Path
+from tempfile import TemporaryDirectory
 from typing import List, Any, Tuple, Dict, FrozenSet, Optional, Iterator
 
 import importlib_metadata
