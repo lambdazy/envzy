@@ -3,11 +3,9 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import FrozenSet, Dict
 
-from lzy.env.base import Deconstructible
-
 
 @dataclass(frozen=True)
-class BasePackage(Deconstructible):
+class BasePackage:
     name: str
 
 

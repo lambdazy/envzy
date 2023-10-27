@@ -1,18 +1,37 @@
 from __future__ import annotations
 
+import os
 import sys
 import types
+from contextlib import contextmanager
 from collections import defaultdict
 from functools import lru_cache
 from inspect import isclass, getmro
 from pathlib import Path
-from typing import List, Any, Tuple, Dict, FrozenSet, Optional
+from typing import List, Any, Tuple, Dict, FrozenSet, Optional, Iterator
 
 import importlib_metadata
 from importlib_metadata import Distribution
 from packaging.requirements import Requirement, InvalidRequirement
 
-from lzy.utils.paths import tmp_cwd
+
+@contextmanager
+def change_working_directory(path: str):
+    old_cwd = os.getcwd()
+
+    os.chdir(path)
+
+    try:
+        yield
+    finally:
+        os.chdir(old_cwd)
+
+
+@contextmanager
+def tmp_cwd() -> Iterator[str]:
+    with TemporaryDirectory() as tmp:
+        with change_working_directory(tmp):
+            yield tmp
 
 
 def getmembers(object: Any, predicate=None) -> List[Tuple[str, Any]]:
