@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from functools import lru_cache
 from typing import Optional, Set, Tuple, FrozenSet
 
@@ -20,9 +22,8 @@ from pypi_simple import (
     NoSuchProjectError
 )
 
-from lzy import config
-from lzy.exceptions import BadPypiIndex
-from lzy.version import __user_agent__
+from .exceptions import BadPypiIndex
+from .version import __user_agent__
 
 PIP_VERSION_REQ = "10.0.0"
 PYPI_INDEX_URL_DEFAULT = PYPI_SIMPLE_ENDPOINT
@@ -108,9 +109,6 @@ def check_version_exists_on_target_platform(
 
 
 def validate_pypi_index_url(pypi_index_url: str) -> None:
-    if config.skip_pypi_validation:
-        return
-
     exception: Optional[Exception] = None
     client = get_pypi_client(pypi_index_url)
 
