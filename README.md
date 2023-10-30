@@ -34,3 +34,9 @@ Out[4]:
  'typing_extensions': '4.8.0',
  'requests': '2.31.0'}
 ```
+
+## Development
+
+* `poetry install` for installing project in dev-mode with all of it dependencies.
+* `poetry publish --build` for publishing package to PyPI.
+* `tox` for run tests.
