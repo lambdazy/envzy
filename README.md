@@ -1,4 +1,4 @@
-A library that explores dependencies from a given module or namespace in a local Python environment, then classifies these dependencies.
+A library that explores dependencies from a given namespace in a local Python environment, then classifies these dependencies.
 
 The library was isolated from the [LZY project](https://github.com/lambdazy/lzy)'s codebase to ensure reusability and reduce the difficulty of dependency management.
 
@@ -11,11 +11,13 @@ In [1]: from envzy import AutoExplorer
 
 In [2]: explorer = AutoExplorer(pypi_index_url='https://pypi.org/simple', additional_pypi_packages={}, target_python=(3, 9))
 
-In [3]: explorer.get_local_module_paths({'foo': AutoExplorer})
-Out[3]: ['/home/lipkin/repos/envzy/envzy']
+In [3]: namespace = {'foo': AutoExplorer}
 
-In [4]: explorer.get_pypi_packages({'foo': AutoExplorer})
-Out[4]:
+In [4]: explorer.get_local_module_paths(namespace)
+Out[4]: ['/home/lipkin/repos/envzy/envzy']
+
+In [5]: explorer.get_pypi_packages(namespace)
+Out[5]:
 {'mailbits': '0.2.1',
  'urllib3': '2.0.7',
  'charset-normalizer': '3.3.1',
