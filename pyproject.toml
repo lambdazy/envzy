@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "envzy"
+version = "0.1.0"
+description = "A library that explores dependencies from a given module or namespace in a local Python environment, then classifies these dependencies."
+license = "Apache-2.0"
+authors = ["Vladimir Lipkin <lipkin@yandex-team.ru>"]
+readme = "README.md"
+homepage = "https://github.com/lambdazy/envzy"
+repository = "https://github.com/lambdazy/envzy"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+packaging = "^23.2"
+typing-extensions = "^4.8.0"
+importlib-metadata = "^6.8.0"
+requests = "^2.31.0"
+pypi-simple = "^1.2.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
