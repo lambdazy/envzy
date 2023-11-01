@@ -6,8 +6,8 @@ from typing import Set
 import pytest
 from importlib_metadata import Distribution
 
-from lzy.env.explorer.classify import ModuleClassifier
-from lzy.env.explorer.packages import LocalPackage, PypiDistribution, LocalDistribution, BasePackage
+from envzy.classify import ModuleClassifier
+from envzy.packages import LocalPackage, PypiDistribution, LocalDistribution, BasePackage
 
 
 @pytest.fixture(scope='function')
@@ -126,9 +126,9 @@ def test_classify_local_distribution(
         # because it requires lzy-test-project and add
         # pylzy into result because lzy-test-project-meta
         # is a local meta project and depends on pylzy
-        assert any(p.name == 'pylzy' for p in result)
+        assert any(p.name == 'envzy' for p in result)
 
-        return {p for p in result if p.name != 'pylzy'}
+        return {p for p in result if p.name != 'envzy'}
 
     assert classify(lzy_test_project) == frozenset({etalon})
     assert classify(lzy_test_project.foo) == frozenset({dataclasses.replace(etalon, is_binary=True)})

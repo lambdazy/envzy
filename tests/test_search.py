@@ -3,13 +3,13 @@ import sys
 import yaml
 import typing_extensions
 
-from lzy.env.explorer.search import (
+from envzy.search import (
     get_direct_module_dependencies,
     get_transitive_module_dependencies,
     get_transitive_namespace_dependencies,
     _get_vars_dependencies,
 )
-from lzy.env.explorer.utils import get_requirements_to_meta_packages
+from envzy.utils import get_requirements_to_meta_packages
 
 
 def test_get_vars_dependencies(with_test_modules: None) -> None:
@@ -120,7 +120,7 @@ def test_get_transitive_namespace_dependencies(with_test_modules) -> None:
 
 
 def test_get_requirements_to_meta_packages() -> None:
-    etalon = {'pylzy', 'lzy-test-project'}
+    etalon = {'envzy', 'lzy-test-project'}
     assert set(get_requirements_to_meta_packages()) == etalon
 
     for pkg in etalon:
