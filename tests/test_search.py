@@ -120,7 +120,7 @@ def test_get_transitive_namespace_dependencies(with_test_modules) -> None:
 
 
 def test_get_requirements_to_meta_packages() -> None:
-    etalon = {'envzy', 'lzy-test-project'}
+    etalon = {'sampleproject', 'lzy-test-project'}
     assert set(get_requirements_to_meta_packages()) == etalon
 
     for pkg in etalon:

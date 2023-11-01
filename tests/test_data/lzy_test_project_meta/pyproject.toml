@@ -5,7 +5,7 @@ requires-python = ">=3.8"
 license = {file = "LICENSE.txt"}
 
 dependencies = [
-    "envzy",
+    "sampleproject",
     "lzy_test_project"
 ]
 

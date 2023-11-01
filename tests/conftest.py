@@ -1,12 +1,22 @@
 from __future__ import annotations
 
 import sys
-import json
 import pathlib
 
-from typing import List, Tuple
+from typing import List
 
 import pytest
+
+
+def pytest_ignore_collect(path, config):
+    root = pathlib.Path(__file__).parent
+    rel_path = pathlib.Path(path).relative_to(root)
+    test_path = str(rel_path)
+
+    # it causes problems, because doctests during collection
+    # modifies sys.path and adding lzy_test_project/src into sys.path.
+    if test_path.startswith('test_data/'):
+        return True
 
 
 @pytest.fixture(scope="module")

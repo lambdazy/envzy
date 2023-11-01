@@ -53,7 +53,12 @@ def test_classify_local_packages(
 
 
 @pytest.mark.vcr
-def test_classify_pypi_packages(classifier: ModuleClassifier, pypi_index_url: str) -> None:
+def test_classify_pypi_packages(
+    classifier: ModuleClassifier,
+    pypi_index_url: str,
+    env_prefix: Path,
+    site_packages: Path
+) -> None:
     import sample
 
     assert classifier.classify([sample]) == frozenset({
@@ -62,7 +67,17 @@ def test_classify_pypi_packages(classifier: ModuleClassifier, pypi_index_url: st
             version='3.0.0',
             pypi_index_url=pypi_index_url,
             have_server_supported_tags=True,
-        )
+        ),
+        LocalDistribution(
+            name='lzy-test-project',
+            paths=frozenset({
+                f'{site_packages}/lzy_test_project',
+                f'{site_packages}/lzy_test_project-3.0.0.dist-info'
+            }),
+            is_binary=False,
+            version='3.0.0',
+            bad_paths=frozenset({f'{env_prefix}/bin/lzy_test_project_bin'})
+        ),
     })
 
     @dataclasses.dataclass
@@ -98,13 +113,13 @@ def test_classify_local_distribution(
     classifier: ModuleClassifier,
     env_prefix: Path,
     site_packages: Path,
-    pypi_index_url,
+    pypi_index_url: str,
     monkeypatch,
 ) -> None:
     # NB: lzy_test_project located at test_data/lzy_test_project and gets installed by tox while
     # tox venv preparing
-    import lzy_test_project
     import lzy_test_project.foo
+    import lzy_test_project
 
     etalon = LocalDistribution(
         name='lzy-test-project',
@@ -120,15 +135,7 @@ def test_classify_local_distribution(
     def classify(module) -> Set[BasePackage]:
         result = classifier.classify([module])
 
-        # NB: it is also classifies lzy-test-project-meta
-        # which have lzy-test-project in requirements, so
-        # we found lzy-test-project, found lzy-test-project meta
-        # because it requires lzy-test-project and add
-        # pylzy into result because lzy-test-project-meta
-        # is a local meta project and depends on pylzy
-        assert any(p.name == 'envzy' for p in result)
-
-        return {p for p in result if p.name != 'envzy'}
+        return {p for p in result if p.name != 'sampleproject'}
 
     assert classify(lzy_test_project) == frozenset({etalon})
     assert classify(lzy_test_project.foo) == frozenset({dataclasses.replace(etalon, is_binary=True)})
