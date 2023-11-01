@@ -1,0 +1,164 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - envzy 0.1.0 (https://github.com/lambdazy/envzy)
+    method: GET
+    uri: https://pypi.org/simple/lzy-test-project/
+  response:
+    body:
+      string: 404 Not Found
+    headers:
+      Accept-Ranges:
+      - bytes
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '13'
+      Content-Security-Policy:
+      - default-src 'none'; sandbox allow-top-navigation
+      Content-Type:
+      - text/plain; charset=UTF-8
+      Date:
+      - Wed, 01 Nov 2023 15:25:40 GMT
+      Permissions-Policy:
+      - publickey-credentials-create=(self),publickey-credentials-get=(self),accelerometer=(),ambient-light-sensor=(),autoplay=(),battery=(),camera=(),display-capture=(),document-domain=(),encrypted-media=(),execution-while-not-rendered=(),execution-while-out-of-viewport=(),fullscreen=(),gamepad=(),geolocation=(),gyroscope=(),hid=(),identity-credentials-get=(),idle-detection=(),local-fonts=(),magnetometer=(),microphone=(),midi=(),otp-credentials=(),payment=(),picture-in-picture=(),screen-wake-lock=(),serial=(),speaker-selection=(),storage-access=(),usb=(),web-share=(),xr-spatial-tracking=()
+      Referrer-Policy:
+      - origin-when-cross-origin
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      Vary:
+      - Accept-Encoding
+      X-Cache:
+      - MISS, HIT
+      X-Cache-Hits:
+      - 0, 1
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - deny
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      X-Served-By:
+      - cache-iad-kiad7000148-IAD, cache-cpt13826-CPT
+      X-Timer:
+      - S1698852341.543326,VS0,VE0
+      X-XSS-Protection:
+      - 1; mode=block
+    status:
+      code: 404
+      message: Not Found
+- request:
+    body: null
+    headers:
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - envzy 0.1.0 (https://github.com/lambdazy/envzy)
+    method: GET
+    uri: https://pypi.org/simple/lzy-test-project-meta/
+  response:
+    body:
+      string: 404 Not Found
+    headers:
+      Accept-Ranges:
+      - bytes
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '13'
+      Content-Security-Policy:
+      - default-src 'none'; sandbox allow-top-navigation
+      Content-Type:
+      - text/plain; charset=UTF-8
+      Date:
+      - Wed, 01 Nov 2023 15:25:41 GMT
+      Permissions-Policy:
+      - publickey-credentials-create=(self),publickey-credentials-get=(self),accelerometer=(),ambient-light-sensor=(),autoplay=(),battery=(),camera=(),display-capture=(),document-domain=(),encrypted-media=(),execution-while-not-rendered=(),execution-while-out-of-viewport=(),fullscreen=(),gamepad=(),geolocation=(),gyroscope=(),hid=(),identity-credentials-get=(),idle-detection=(),local-fonts=(),magnetometer=(),microphone=(),midi=(),otp-credentials=(),payment=(),picture-in-picture=(),screen-wake-lock=(),serial=(),speaker-selection=(),storage-access=(),usb=(),web-share=(),xr-spatial-tracking=()
+      Referrer-Policy:
+      - origin-when-cross-origin
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      Vary:
+      - Accept-Encoding
+      X-Cache:
+      - MISS, HIT
+      X-Cache-Hits:
+      - 0, 1
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - deny
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      X-Served-By:
+      - cache-iad-kcgs7200156-IAD, cache-cpt13825-CPT
+      X-Timer:
+      - S1698852341.167423,VS0,VE0
+      X-XSS-Protection:
+      - 1; mode=block
+    status:
+      code: 404
+      message: Not Found
+- request:
+    body: null
+    headers:
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - envzy 0.1.0 (https://github.com/lambdazy/envzy)
+    method: GET
+    uri: https://pypi.org/simple/envzy/
+  response:
+    body:
+      string: 404 Not Found
+    headers:
+      Accept-Ranges:
+      - bytes
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '13'
+      Content-Security-Policy:
+      - default-src 'none'; sandbox allow-top-navigation
+      Content-Type:
+      - text/plain; charset=UTF-8
+      Date:
+      - Wed, 01 Nov 2023 15:25:41 GMT
+      Permissions-Policy:
+      - publickey-credentials-create=(self),publickey-credentials-get=(self),accelerometer=(),ambient-light-sensor=(),autoplay=(),battery=(),camera=(),display-capture=(),document-domain=(),encrypted-media=(),execution-while-not-rendered=(),execution-while-out-of-viewport=(),fullscreen=(),gamepad=(),geolocation=(),gyroscope=(),hid=(),identity-credentials-get=(),idle-detection=(),local-fonts=(),magnetometer=(),microphone=(),midi=(),otp-credentials=(),payment=(),picture-in-picture=(),screen-wake-lock=(),serial=(),speaker-selection=(),storage-access=(),usb=(),web-share=(),xr-spatial-tracking=()
+      Referrer-Policy:
+      - origin-when-cross-origin
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      Vary:
+      - Accept-Encoding
+      X-Cache:
+      - MISS, HIT
+      X-Cache-Hits:
+      - 0, 1
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - deny
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      X-Served-By:
+      - cache-iad-kjyo7100143-IAD, cache-cpt13826-CPT
+      X-Timer:
+      - S1698852342.787596,VS0,VE1
+      X-XSS-Protection:
+      - 1; mode=block
+    status:
+      code: 404
+      message: Not Found
+version: 1
