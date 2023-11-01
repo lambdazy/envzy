@@ -394,7 +394,6 @@ class ModuleClassifier:
         for path in distribution.files or ():
             abs_path = distribution.locate_file(path).resolve()
             if base_path not in abs_path.parents:
-                print(1, base_path, abs_path)
                 bad_paths.add(str(abs_path))
                 continue
 

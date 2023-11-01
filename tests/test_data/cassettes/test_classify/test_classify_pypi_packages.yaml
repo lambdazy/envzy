@@ -57,7 +57,7 @@ interactions:
       Content-Type:
       - text/html
       Date:
-      - Wed, 01 Nov 2023 15:25:38 GMT
+      - Wed, 01 Nov 2023 16:52:13 GMT
       ETag:
       - '"VsPaZi+8KfaPea12StmbWA"'
       Permissions-Policy:
@@ -81,9 +81,9 @@ interactions:
       X-PyPI-Last-Serial:
       - '17870111'
       X-Served-By:
-      - cache-iad-kjyo7100129-IAD, cache-cpt13825-CPT
+      - cache-iad-kjyo7100129-IAD, cache-cpt13820-CPT
       X-Timer:
-      - S1698852338.085256,VS0,VE1
+      - S1698857533.093539,VS0,VE1
       X-XSS-Protection:
       - 1; mode=block
       content-length:
@@ -91,6 +91,114 @@ interactions:
     status:
       code: 200
       message: OK
+- request:
+    body: null
+    headers:
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - envzy 0.1.0 (https://github.com/lambdazy/envzy)
+    method: GET
+    uri: https://pypi.org/simple/lzy-test-project-meta/
+  response:
+    body:
+      string: 404 Not Found
+    headers:
+      Accept-Ranges:
+      - bytes
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '13'
+      Content-Security-Policy:
+      - default-src 'none'; sandbox allow-top-navigation
+      Content-Type:
+      - text/plain; charset=UTF-8
+      Date:
+      - Wed, 01 Nov 2023 16:52:13 GMT
+      Permissions-Policy:
+      - publickey-credentials-create=(self),publickey-credentials-get=(self),accelerometer=(),ambient-light-sensor=(),autoplay=(),battery=(),camera=(),display-capture=(),document-domain=(),encrypted-media=(),execution-while-not-rendered=(),execution-while-out-of-viewport=(),fullscreen=(),gamepad=(),geolocation=(),gyroscope=(),hid=(),identity-credentials-get=(),idle-detection=(),local-fonts=(),magnetometer=(),microphone=(),midi=(),otp-credentials=(),payment=(),picture-in-picture=(),screen-wake-lock=(),serial=(),speaker-selection=(),storage-access=(),usb=(),web-share=(),xr-spatial-tracking=()
+      Referrer-Policy:
+      - origin-when-cross-origin
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      Vary:
+      - Accept-Encoding
+      X-Cache:
+      - MISS, MISS
+      X-Cache-Hits:
+      - 0, 0
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - deny
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      X-Served-By:
+      - cache-iad-kcgs7200156-IAD, cache-cpt13828-CPT
+      X-Timer:
+      - S1698857534.715439,VS0,VE259
+      X-XSS-Protection:
+      - 1; mode=block
+    status:
+      code: 404
+      message: Not Found
+- request:
+    body: null
+    headers:
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - envzy 0.1.0 (https://github.com/lambdazy/envzy)
+    method: GET
+    uri: https://pypi.org/simple/lzy-test-project/
+  response:
+    body:
+      string: 404 Not Found
+    headers:
+      Accept-Ranges:
+      - bytes
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '13'
+      Content-Security-Policy:
+      - default-src 'none'; sandbox allow-top-navigation
+      Content-Type:
+      - text/plain; charset=UTF-8
+      Date:
+      - Wed, 01 Nov 2023 16:52:14 GMT
+      Permissions-Policy:
+      - publickey-credentials-create=(self),publickey-credentials-get=(self),accelerometer=(),ambient-light-sensor=(),autoplay=(),battery=(),camera=(),display-capture=(),document-domain=(),encrypted-media=(),execution-while-not-rendered=(),execution-while-out-of-viewport=(),fullscreen=(),gamepad=(),geolocation=(),gyroscope=(),hid=(),identity-credentials-get=(),idle-detection=(),local-fonts=(),magnetometer=(),microphone=(),midi=(),otp-credentials=(),payment=(),picture-in-picture=(),screen-wake-lock=(),serial=(),speaker-selection=(),storage-access=(),usb=(),web-share=(),xr-spatial-tracking=()
+      Referrer-Policy:
+      - origin-when-cross-origin
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      Vary:
+      - Accept-Encoding
+      X-Cache:
+      - MISS, MISS
+      X-Cache-Hits:
+      - 0, 0
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - deny
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      X-Served-By:
+      - cache-iad-kiad7000148-IAD, cache-cpt13820-CPT
+      X-Timer:
+      - S1698857535.604776,VS0,VE255
+      X-XSS-Protection:
+      - 1; mode=block
+    status:
+      code: 404
+      message: Not Found
 - request:
     body: null
     headers:
@@ -2103,7 +2211,7 @@ interactions:
       Content-Type:
       - text/html
       Date:
-      - Wed, 01 Nov 2023 15:25:38 GMT
+      - Wed, 01 Nov 2023 16:52:15 GMT
       ETag:
       - '"cCKO+3DoVfi7g3VpEOKF/g"'
       Permissions-Policy:
@@ -2127,9 +2235,9 @@ interactions:
       X-PyPI-Last-Serial:
       - '20337148'
       X-Served-By:
-      - cache-iad-kcgs7200024-IAD, cache-cpt13825-CPT
+      - cache-iad-kcgs7200024-IAD, cache-cpt13826-CPT
       X-Timer:
-      - S1698852339.722808,VS0,VE1
+      - S1698857535.491343,VS0,VE228
       X-XSS-Protection:
       - 1; mode=block
       content-length:
@@ -2400,7 +2508,7 @@ interactions:
       Content-Type:
       - text/html
       Date:
-      - Wed, 01 Nov 2023 15:25:39 GMT
+      - Wed, 01 Nov 2023 16:52:17 GMT
       ETag:
       - '"k9VrQkHYU3sNEJDoWrLqGA"'
       Permissions-Policy:
@@ -2414,7 +2522,7 @@ interactions:
       X-Cache:
       - HIT, HIT
       X-Cache-Hits:
-      - 23, 9
+      - 23, 1
       X-Content-Type-Options:
       - nosniff
       X-Frame-Options:
@@ -2424,9 +2532,9 @@ interactions:
       X-PyPI-Last-Serial:
       - '20337347'
       X-Served-By:
-      - cache-iad-kcgs7200178-IAD, cache-cpt13824-CPT
+      - cache-iad-kcgs7200178-IAD, cache-cpt13825-CPT
       X-Timer:
-      - S1698852340.886987,VS0,VE0
+      - S1698857537.967531,VS0,VE224
       X-XSS-Protection:
       - 1; mode=block
       content-length:
