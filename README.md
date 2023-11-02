@@ -1,3 +1,6 @@
+[![Tests](https://github.com/lambdazy/envzy/actions/workflows/tests.yaml/badge.svg)](https://github.com/lambdazy/envzy/actions/workflows/tests.yaml)
+[![Coverage](https://gist.githubusercontent.com/vhaldemar/54fb52d30437eae6999d3485976453ed/raw/0b98be31e7a371919c9296bd60f9cf71aca58fbf/master-coverage.svg)](https://github.com/lambdazy/envzy/tree/master/tests)
+
 A library that explores dependencies from a given namespace in a local Python environment, then classifies these dependencies.
 
 The library was isolated from the [LZY project](https://github.com/lambdazy/lzy)'s codebase to ensure reusability and reduce the difficulty of dependency management.
