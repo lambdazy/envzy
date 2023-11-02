@@ -7,6 +7,7 @@ authors = ["Vladimir Lipkin <lipkin@yandex-team.ru>"]
 readme = "README.md"
 homepage = "https://github.com/lambdazy/envzy"
 repository = "https://github.com/lambdazy/envzy"
+include = ["AUTHORS", "CONTRIBUTING"]
 
 [tool.poetry.dependencies]
 python = "^3.8"
