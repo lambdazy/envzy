@@ -3,7 +3,7 @@ from __future__ import annotations
 import sys
 from dataclasses import dataclass, field
 from logging import getLogger
-from typing import List, Type, TypeVar, Tuple, Union
+from typing import List, Type, TypeVar, Tuple, Union, Iterable
 
 from .base import BaseExplorer, ModulePathsList, PackagesDict
 from .classify import ModuleClassifier
@@ -29,6 +29,7 @@ class AutoExplorer(BaseExplorer):
     pypi_index_url: str = PYPI_INDEX_URL_DEFAULT
     additional_pypi_packages: PackagesDict = field(default_factory=dict)
     target_python: PythonVersion = sys.version_info[:2]
+    search_stop_list: Iterable = ()
 
     def get_local_module_paths(self, namespace: VarsNamespace) -> ModulePathsList:
         packages = self._get_packages(namespace, LocalPackage)
@@ -132,7 +133,8 @@ class AutoExplorer(BaseExplorer):
         namespace: VarsNamespace,
         filter_class: Type[P],
     ) -> List[P]:
-        modules = get_transitive_namespace_dependencies(namespace)
+        stop_list = frozenset(self.search_stop_list)
+        modules = get_transitive_namespace_dependencies(namespace, stop_list=stop_list)
 
         classifier = ModuleClassifier(
             self.pypi_index_url,
