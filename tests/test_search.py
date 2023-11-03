@@ -125,3 +125,25 @@ def test_get_requirements_to_meta_packages() -> None:
 
     for pkg in etalon:
         assert get_requirements_to_meta_packages()[pkg][0].name == 'lzy-test-project-meta'
+
+
+def test_stop_list(with_test_modules):
+    import modules_for_tests.level1.level1 as level1
+    import modules_for_tests.level1.level2.level2 as level2
+    import modules_for_tests.level1.level2.level3.level3 as level3
+    import modules_for_tests_3.two_dependencies as two_dependencies
+
+    assert get_direct_module_dependencies(
+        level3,
+        stop_list=frozenset(['yaml']),
+    ) == frozenset()
+    assert get_direct_module_dependencies(
+        two_dependencies,
+        stop_list=frozenset(['modules_for_tests_3']),
+    ) == frozenset()
+
+    assert get_transitive_module_dependencies(
+        level1,
+        include_parents=False,
+        stop_list=frozenset(['yaml']),
+    ) - {typing_extensions} == {level2, level3}

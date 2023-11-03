@@ -13,3 +13,4 @@ def test_defaults(pypi_index_url):
     assert explorer.additional_pypi_packages == {}
     assert explorer.pypi_index_url == pypi_index_url
     assert explorer.target_python == sys.version_info[:2]
+    assert explorer.search_stop_list == ()
