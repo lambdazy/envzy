@@ -1,9 +1,9 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
+import sys
+from dataclasses import dataclass, field
 from logging import getLogger
-from typing import List, Type, TypeVar
-from packaging.tags import PythonVersion
+from typing import List, Type, TypeVar, Tuple, Union
 
 from .base import BaseExplorer, ModulePathsList, PackagesDict
 from .classify import ModuleClassifier
@@ -15,17 +15,20 @@ from .packages import (
     PypiDistribution,
     LocalDistribution
 )
+from .pypi import PYPI_INDEX_URL_DEFAULT
 
 logger = getLogger(__name__)
 
 P = TypeVar('P', bound=BasePackage)
 
+PythonVersion = Union[Tuple[int, int], Tuple[int, int, int]]
+
 
 @dataclass
 class AutoExplorer(BaseExplorer):
-    pypi_index_url: str
-    additional_pypi_packages: PackagesDict
-    target_python: PythonVersion
+    pypi_index_url: str = PYPI_INDEX_URL_DEFAULT
+    additional_pypi_packages: PackagesDict = field(default_factory=dict)
+    target_python: PythonVersion = sys.version_info[:2]
 
     def get_local_module_paths(self, namespace: VarsNamespace) -> ModulePathsList:
         packages = self._get_packages(namespace, LocalPackage)
