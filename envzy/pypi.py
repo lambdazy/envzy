@@ -39,6 +39,8 @@ TARGET_PLATFORMS: Tuple[str, ...] = (
     for i in range(5, 32)  # 5..31; at the server ubuntu 20.04 which have glibc 2.31
 )
 
+VALIDATE_PYPI_INDEX_URL = True
+
 
 @lru_cache(maxsize=None)
 def get_pypi_client(url: str) -> PyPISimple:
@@ -109,6 +111,9 @@ def check_version_exists_on_target_platform(
 
 
 def validate_pypi_index_url(pypi_index_url: str) -> None:
+    if not VALIDATE_PYPI_INDEX_URL:
+        return
+
     exception: Optional[Exception] = None
     client = get_pypi_client(pypi_index_url)
 
