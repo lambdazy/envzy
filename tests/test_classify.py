@@ -9,7 +9,7 @@ import pytest
 from importlib_metadata import Distribution
 
 from envzy.classify import ModuleClassifier
-from envzy.packages import LocalPackage, PypiDistribution, LocalDistribution, BasePackage
+from envzy.packages import LocalPackage, PypiDistribution, LocalDistribution, BasePackage, BrokenModules
 
 
 @pytest.fixture(scope='function')
@@ -178,3 +178,17 @@ def test_classify_editable_distribution(classifier: ModuleClassifier, get_test_d
             is_binary=False
         )
     })
+
+
+def test_classify_six(classifier: ModuleClassifier, monkeypatch):
+    import six
+
+    monkeypatch.setattr(classifier, 'files_to_distributions', {})
+    assert classifier.classify([six]) == frozenset([
+        BrokenModules(
+            name='packages_with_bad_path',
+            modules_paths=(
+                ('six', '/home/lipkin/repos/envzy/.tox/py311/lib/python3.11/site-packages/six.py'),
+            )
+        )
+    ])

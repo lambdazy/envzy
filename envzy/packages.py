@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import FrozenSet, Dict
+from typing import FrozenSet, Dict, Tuple
 
 
 @dataclass(frozen=True)
@@ -30,4 +30,4 @@ class PypiDistribution(BasePackage):
 
 @dataclass(frozen=True)
 class BrokenModules(BasePackage):
-    modules_paths: Dict[str, str]
+    modules_paths: Tuple[Tuple[str, str], ...]
