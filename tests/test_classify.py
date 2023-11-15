@@ -180,7 +180,7 @@ def test_classify_editable_distribution(classifier: ModuleClassifier, get_test_d
     })
 
 
-def test_classify_six(classifier: ModuleClassifier, monkeypatch):
+def test_classify_six(classifier: ModuleClassifier, monkeypatch, site_packages: Path):
     import six
 
     monkeypatch.setattr(classifier, 'files_to_distributions', {})
@@ -188,7 +188,7 @@ def test_classify_six(classifier: ModuleClassifier, monkeypatch):
         BrokenModules(
             name='packages_with_bad_path',
             modules_paths=(
-                ('six', '/home/lipkin/repos/envzy/.tox/py311/lib/python3.11/site-packages/six.py'),
+                ('six', f'{site_packages}/six.py'),
             )
         )
     ])
