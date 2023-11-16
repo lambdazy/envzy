@@ -2,8 +2,9 @@ from __future__ import annotations
 
 import json
 import os
+import site
 from functools import lru_cache
-from typing import FrozenSet, Set, Dict, cast, Iterable, Tuple, Union, List
+from typing import FrozenSet, Set, Dict, cast, Iterable, Tuple, Union, List, Optional
 from types import ModuleType
 
 from importlib.machinery import ExtensionFileLoader
@@ -51,6 +52,10 @@ class ModuleClassifier:
         self.files_to_distributions = get_files_to_distributions()
         self.names_to_distributions = get_names_to_distributions()
         self.requirements_to_meta_packages = get_requirements_to_meta_packages()
+
+        self.bad_prefixes = frozenset([
+            site.getusersitepackages()
+        ]) | set(site.getsitepackages())
 
     def classify(self, modules: Iterable[ModuleType]) -> FrozenSet[BasePackage]:
         distributions: DistributionSet = set()
@@ -199,7 +204,7 @@ class ModuleClassifier:
         result: Set[BasePackage] = set()
         package: BasePackage
         if broken:
-            package = BrokenModules(name='packages_with_bad_path', modules_paths=broken)
+            package = BrokenModules(name='packages_with_bad_path', modules_paths=tuple(broken.items()))
             result.add(package)
 
         for top_level, paths in fake_distributions.items():
@@ -408,7 +413,7 @@ class ModuleClassifier:
         loader = getattr(module, '__loader__', None)
         return bool(loader and isinstance(loader, ExtensionFileLoader))
 
-    def _get_top_level_path(self, module: ModuleType) -> str:
+    def _get_top_level_path(self, module: ModuleType) -> Optional[str]:
         """
         Get path of module's top-level dir.
         Why not just `top_level_module.__file__`?
@@ -441,4 +446,12 @@ class ModuleClassifier:
         # we are doing level -= 1 and truncating two parts and getting a/b/c/foo
         top_level_parts = filename_parts[:-level]
 
-        return os.sep.join(top_level_parts)
+        result = os.sep.join(top_level_parts)
+
+        # in case of some strange things (look at six: __package__ = __name__)
+        # we can get site-packages itself as a result.
+        # so, we are blacklisting such results
+        if result in self.bad_prefixes:
+            return None
+
+        return result
