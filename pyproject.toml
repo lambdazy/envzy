@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "envzy"
-version = "0.2.1"
+version = "0.2.2"
 description = "A library that explores dependencies from a given module or namespace in a local Python environment, then classifies these dependencies."
 license = "Apache-2.0"
 authors = ["Vladimir Lipkin <lipkin@yandex-team.ru>"]
