@@ -192,3 +192,53 @@ def test_classify_six(classifier: ModuleClassifier, monkeypatch, site_packages: 
             )
         )
     ])
+
+
+@pytest.mark.vcr
+def test_classify_with_extra_index(pypi_index_url):
+    classifier = ModuleClassifier(
+        pypi_index_url=pypi_index_url,
+        target_python=sys.version_info[:2],
+        extra_index_urls=('https://download.pytorch.org/whl/cu118', )
+    )
+
+    @dataclasses.dataclass(frozen=True)
+    class MyDistribution:
+        name: str
+        version: str
+
+    assert classifier._classify_distributions({
+        MyDistribution('tensorflow', '2.13.0'),
+        MyDistribution('torch', '2.1.1+cu118'),
+    }, set()) == frozenset([
+        PypiDistribution(
+            name='torch',
+            version='2.1.1+cu118',
+            pypi_index_url='https://download.pytorch.org/whl/cu118',
+            have_server_supported_tags=True
+        ),
+        PypiDistribution(
+            name='tensorflow',
+            version='2.13.0',
+            pypi_index_url='https://pypi.org/simple/',
+            have_server_supported_tags=True
+        ),
+    ])
+
+    assert classifier._classify_distributions({
+        MyDistribution('tensorflow', '2.13.0'),
+        MyDistribution('torch', '2.1.1'),
+    }, set()) == frozenset([
+        PypiDistribution(
+            name='torch',
+            version='2.1.1',
+            pypi_index_url='https://pypi.org/simple/',
+            have_server_supported_tags=True
+        ),
+        PypiDistribution(
+            name='tensorflow',
+            version='2.13.0',
+            pypi_index_url='https://pypi.org/simple/',
+            have_server_supported_tags=True
+        ),
+    ])
