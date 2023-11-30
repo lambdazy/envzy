@@ -3,7 +3,7 @@ from __future__ import annotations
 import sys
 from dataclasses import dataclass, field
 from logging import getLogger
-from typing import List, Type, TypeVar, Tuple, Union, Iterable
+from typing import List, Type, TypeVar, Tuple, Union, Sequence
 
 from .base import BaseExplorer, ModulePathsList, PackagesDict
 from .classify import ModuleClassifier
@@ -27,9 +27,10 @@ PythonVersion = Union[Tuple[int, int], Tuple[int, int, int]]
 @dataclass
 class AutoExplorer(BaseExplorer):
     pypi_index_url: str = PYPI_INDEX_URL_DEFAULT
+    extra_index_urls: Sequence[str] = ()
     additional_pypi_packages: PackagesDict = field(default_factory=dict)
     target_python: PythonVersion = sys.version_info[:2]
-    search_stop_list: Iterable = ()
+    search_stop_list: Sequence[str] = ()
 
     def get_local_module_paths(self, namespace: VarsNamespace) -> ModulePathsList:
         packages = self._get_packages(namespace, LocalPackage)
@@ -138,6 +139,7 @@ class AutoExplorer(BaseExplorer):
 
         classifier = ModuleClassifier(
             self.pypi_index_url,
+            extra_index_urls=tuple(self.extra_index_urls),
             target_python=self.target_python
         )
 

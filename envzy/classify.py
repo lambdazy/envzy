@@ -43,8 +43,15 @@ DistributionSet = Set[Distribution]
 
 
 class ModuleClassifier:
-    def __init__(self, pypi_index_url: str, target_python: PythonVersion):
+    def __init__(
+        self,
+        pypi_index_url: str,
+        target_python: PythonVersion,
+        *,
+        extra_index_urls: Tuple[str, ...] = (),
+    ):
         self.pypi_index_url = pypi_index_url
+        self.extra_index_urls = extra_index_urls
         self.target_python = target_python
 
         self.stdlib_module_names = get_stdlib_module_names()
@@ -143,13 +150,13 @@ class ModuleClassifier:
         binary_distributions: DistributionSet,
     ) -> Union[PypiDistribution, LocalDistribution]:
         # TODO: make this check parallel
-        if self._check_distribution_at_pypi(
-            pypi_index_url=self.pypi_index_url,
+        pypi_index_url = self._find_distribution_at_pypi(
             name=distribution.name,
             version=distribution.version,
-        ):
+        )
+        if pypi_index_url:
             have_server_supported_tags = self._check_distribution_platform_at_pypi(
-                pypi_index_url=self.pypi_index_url,
+                pypi_index_url=pypi_index_url,
                 name=distribution.name,
                 version=distribution.version,
                 target_python=self.target_python
@@ -158,7 +165,7 @@ class ModuleClassifier:
             return PypiDistribution(
                 name=distribution.name,
                 version=distribution.version,
-                pypi_index_url=self.pypi_index_url,
+                pypi_index_url=pypi_index_url,
                 have_server_supported_tags=have_server_supported_tags,
             )
 
@@ -354,19 +361,21 @@ class ModuleClassifier:
         # which is probably will not exists at user's system
         return editable and check_url_is_local_file(url)
 
-    @staticmethod
-    @lru_cache(maxsize=None)
-    def _check_distribution_at_pypi(pypi_index_url: str, name: str, version: str) -> bool:
+    def _find_distribution_at_pypi(self, name: str, version: str) -> Optional[str]:
         """
         Just cached version of `check_package_version_exists`, but it can be (and would be)
         overrided in descendant classes.
         """
 
-        return check_package_version_exists(
-            pypi_index_url=pypi_index_url,
-            name=name,
-            version=version,
-        )
+        for pypi_index_url in (self.pypi_index_url, ) + self.extra_index_urls:
+            if check_package_version_exists(
+                pypi_index_url=pypi_index_url,
+                name=name,
+                version=version,
+            ):
+                return pypi_index_url
+
+        return None
 
     @staticmethod
     @lru_cache(maxsize=None)
