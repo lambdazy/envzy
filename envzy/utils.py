@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import os
 import sys
+import traceback
 import types
 from contextlib import contextmanager
 from collections import defaultdict
@@ -157,32 +158,31 @@ def get_files_to_distributions() -> Dict[str, Distribution]:
     result = {}
 
     for distribution in get_names_to_distributions().values():
-        # NB: TODO: distribution.files could be empty in case of
-        # dist-packages & .egg-info.
-        # Primarily it affects python packages, installed
-        # via apt-get, for example.
-        # So if user working in non-isolated environment
-        # and using packages from dist-packages, we will
-        # mistreat these packages as local in future while
-        # classification.
-        for filename in distribution.files or ():
-            fullpath = distribution.locate_file(filename)
+        for path in get_distribution_files(distribution):
+            fullpath = distribution.locate_file(path)
             result[str(fullpath)] = distribution
 
     return result
 
 
+def is_path_package_meta(path: Path) -> bool:
+    return any(
+        part.endswith('.dist-info') or part.endswith('.egg-info')
+        for part in path.parts
+    )
+
+
 def check_distribution_is_meta_package(distribution: Distribution) -> bool:
-    if not distribution.files:
+    distribution_files = get_distribution_files(distribution)
+    if not distribution_files:
         # NB: .egg-info packages and some apt-packages doesn't have
         # a dist-info directory and importlib.metadata fails to generate
         # files list
         return False
 
-    directories = [Path(filename).parts[0] for filename in distribution.files or ()]
     return all(
-        directory.endswith('.dist-info') or directory.endswith('.egg-info')
-        for directory in directories
+        is_path_package_meta(path)
+        for path in distribution_files
     )
 
 
@@ -224,3 +224,57 @@ def is_lazy_module(module: types.ModuleType) -> bool:
         getattr(module.__class__, '__module__', None) == 'tensorboard.lazy' and
         type(module).__name__ == 'LazyModule'
     )
+
+
+def get_distribution_files(distribution: Distribution) -> Tuple[Path, ...]:
+    try:
+        # NB: TODO: distribution.files could be empty in case of
+        # dist-packages & .egg-info.
+        # Primarily it affects python packages, installed
+        # via apt-get, for example.
+        # So if user working in non-isolated environment
+        # and using packages from dist-packages, we will
+        # mistreat these packages as local in future while
+        # classification.
+        files = distribution.files
+        if files:
+            return tuple(
+                distribution.locate_file(path).resolve()
+                for path in files
+            )
+    except ValueError:
+        _, _, raw_tb = sys.exc_info()
+        # NB: I dont wanna to supress any random errors,
+        # only well-known ones
+        if not is_exception_in_file(raw_tb, 'pathlib.py'):
+            raise
+
+        # so well-known thing in that case, that if distribution
+        # have .egg-info instead .dist-info AND it have files outside
+        # site-packages, distribution.files fails
+
+    # this is the case for some .egg-info packages
+    # NB: it is copy-paste from importlib_metadata but without
+    # calculation of relative paths from package root, because it breaks
+    text = distribution.read_text('installed-files.txt')
+    subdir = getattr(distribution, '_path', None)
+    if not text or not subdir:
+        return ()
+
+    paths = tuple(
+        (subdir / name)
+        .resolve()
+        for name in text.splitlines()
+    )
+
+    return paths
+
+
+def is_exception_in_file(raw_tb: Optional[types.TracebackType], filename: str) -> bool:
+    if not raw_tb:
+        return False
+
+    tb = traceback.extract_tb(raw_tb)
+    last_frame = tb[-1]
+    last_frame_path = Path(last_frame.filename)
+    return last_frame_path.parts[-1] == filename
