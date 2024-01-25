@@ -12,7 +12,7 @@ from tempfile import TemporaryDirectory
 from typing import List, Any, Tuple, Dict, FrozenSet, Optional, Iterator
 
 import importlib_metadata
-from importlib_metadata import Distribution
+from importlib_metadata import Distribution as BaseDistribution
 from packaging.requirements import Requirement, InvalidRequirement
 
 
@@ -33,6 +33,22 @@ def tmp_cwd() -> Iterator[str]:
     with TemporaryDirectory() as tmp:
         with change_working_directory(tmp):
             yield tmp
+
+
+def canonize_name(name: str) -> str:
+    return name.replace('_', '-')
+
+
+class Distribution:
+    def __init__(self, base: BaseDistribution):
+        self.base = base
+
+    @property
+    def name(self) -> str:
+        return canonize_name(self.base.name)
+
+    def __getattr__(self, name: str):
+        return getattr(self.base, name)
 
 
 def getmembers(object: Any, predicate=None) -> List[Tuple[str, Any]]:
@@ -129,7 +145,8 @@ def get_names_to_distributions() -> Dict[str, Distribution]:
     # In case of PermissionError, location of tmp dir can be moved with
     # TMPDIR env variable.
     with tmp_cwd():
-        for distribution in importlib_metadata.distributions():
+        for base_distribution in importlib_metadata.distributions():
+            distribution = Distribution(base_distribution)
             result[distribution.name] = distribution
 
     return result
@@ -175,7 +192,7 @@ def get_name_from_requirement_string(requirement_string: str) -> Optional[str]:
     except InvalidRequirement:
         return None
 
-    return requirement.name
+    return canonize_name(requirement.name)
 
 
 @lru_cache(maxsize=None)  # cache size is about few MB

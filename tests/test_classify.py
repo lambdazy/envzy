@@ -6,10 +6,9 @@ from pathlib import Path
 from typing import Set
 
 import pytest
-from importlib_metadata import Distribution
-
 from envzy.classify import ModuleClassifier
 from envzy.packages import LocalPackage, PypiDistribution, LocalDistribution, BasePackage, BrokenModules
+from envzy.utils import Distribution
 
 
 @pytest.fixture(scope='function')
@@ -195,7 +194,7 @@ def test_classify_six(classifier: ModuleClassifier, monkeypatch, site_packages: 
 
 
 @pytest.mark.vcr
-def test_classify_with_extra_index(pypi_index_url):
+def test_classify_with_extra_index(pypi_index_url) -> None:
     classifier = ModuleClassifier(
         pypi_index_url=pypi_index_url,
         target_python=sys.version_info[:2],
@@ -208,8 +207,8 @@ def test_classify_with_extra_index(pypi_index_url):
         version: str
 
     assert classifier._classify_distributions({
-        MyDistribution('tensorflow', '2.13.0'),
-        MyDistribution('torch', '2.1.1+cu118'),
+        MyDistribution('tensorflow', '2.13.0'),  # type: ignore
+        MyDistribution('torch', '2.1.1+cu118'),  # type: ignore
     }, set()) == frozenset([
         PypiDistribution(
             name='torch',
@@ -226,8 +225,8 @@ def test_classify_with_extra_index(pypi_index_url):
     ])
 
     assert classifier._classify_distributions({
-        MyDistribution('tensorflow', '2.13.0'),
-        MyDistribution('torch', '2.1.1'),
+        MyDistribution('tensorflow', '2.13.0'),  # type: ignore
+        MyDistribution('torch', '2.1.1'),  # type: ignore
     }, set()) == frozenset([
         PypiDistribution(
             name='torch',

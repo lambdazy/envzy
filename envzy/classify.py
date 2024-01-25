@@ -8,7 +8,6 @@ from typing import FrozenSet, Set, Dict, cast, Iterable, Tuple, Union, List, Opt
 from types import ModuleType
 
 from importlib.machinery import ExtensionFileLoader
-from importlib_metadata import Distribution
 
 from typing_extensions import assert_never
 from packaging.tags import PythonVersion
@@ -36,6 +35,7 @@ from .utils import (
     check_distribution_is_meta_package,
     check_url_is_local_file,
     is_wellknown_fake_module,
+    Distribution,
 )
 
 
@@ -253,7 +253,7 @@ class ModuleClassifier:
             """here we check if package with 'name' are required by one or more
             meta-packages and if it is, we adding these meta packages to our DFS"""
 
-            new_meta_packages = self.requirements_to_meta_packages.get(name, ())
+            new_meta_packages = self.requirements_to_meta_packages.get(name, [])
             for meta_package in new_meta_packages:
                 if meta_package.name not in seen_meta_packages:
                     meta_packages.add(meta_package)
