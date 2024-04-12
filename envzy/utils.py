@@ -220,9 +220,12 @@ def is_wellknown_fake_module(top_level_module_name: str, module_filename: str) -
 
 
 def is_lazy_module(module: types.ModuleType) -> bool:
+    module_package = getattr(module.__class__, '__module__', None)
+    module_name = type(module).__name__
     return (
-        getattr(module.__class__, '__module__', None) == 'tensorboard.lazy' and
-        type(module).__name__ == 'LazyModule'
+        (module_package == 'tensorboard.lazy' and module_name == 'LazyModule')
+        or
+        (module_package == 'tensorflow.python.util.lazy_loader' and module_name == 'KerasLazyLoader')
     )
 
 
