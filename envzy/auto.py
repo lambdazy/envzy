@@ -91,7 +91,7 @@ class AutoExplorer(BaseExplorer):
                 nonbinary
             )
 
-        return list(set().union(*(p.paths for p in nonbinary)))
+        return sorted(set().union(*(p.paths for p in nonbinary)))
 
     def get_pypi_packages(self, namespace: VarsNamespace) -> PackagesDict:
         packages = self._get_packages(namespace)
@@ -153,7 +153,7 @@ class AutoExplorer(BaseExplorer):
 
     def _get_console_scripts(self, packages: List[LocalPackage]) -> List[str]:
         return list(
-            frozenset.union(*(p.console_scripts for p in packages))
+            frozenset().union(*(p.console_scripts for p in packages))
         )
 
     def _filter(self, packages: List[BasePackage], filter_class: Type[P]) -> List[P]:

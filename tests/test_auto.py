@@ -22,9 +22,9 @@ def test_defaults(pypi_index_url):
 def test_get_environment_spec(pypi_index_url, site_packages, env_prefix):
     import lzy_test_project
 
-    exporer = AutoExplorer()
+    explorer = AutoExplorer()
 
-    spec = exporer.get_environment_spec({'foo': lzy_test_project})
+    spec = explorer.get_environment_spec({'foo': lzy_test_project})
 
     assert spec == EnvironmentSpec(
         packages=[
@@ -58,3 +58,11 @@ def test_get_environment_spec(pypi_index_url, site_packages, env_prefix):
             f'{env_prefix}/bin/lzy_test_project_bin'
         ]
     )
+
+    assert explorer.get_local_module_paths({'foo': lzy_test_project}) == [
+        f'{site_packages}/lzy_test_project',
+        f'{site_packages}/lzy_test_project-3.0.0.dist-info'
+    ]
+    assert explorer.get_pypi_packages({'foo': lzy_test_project}) == {
+        'sampleproject': '3.0.0'
+    }
