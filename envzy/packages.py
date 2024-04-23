@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import FrozenSet, Dict, Tuple
+from typing import FrozenSet, Tuple
 
 
 @dataclass(frozen=True)
@@ -12,6 +12,7 @@ class BasePackage:
 @dataclass(frozen=True)
 class LocalPackage(BasePackage):
     paths: FrozenSet[str]
+    console_scripts: FrozenSet[str]
     is_binary: bool
 
 

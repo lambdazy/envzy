@@ -64,3 +64,4 @@ dmypy.json
 [._]sw[a-p]
 
 poetry.lock
+.python-version

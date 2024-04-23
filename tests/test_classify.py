@@ -32,7 +32,8 @@ def test_classify_local_packages(
     assert classifier.classify([level1]) == frozenset([LocalPackage(
         name='modules_for_tests',
         paths=frozenset([str(get_test_data_path('modules_for_tests'))]),
-        is_binary=False
+        is_binary=False,
+        console_scripts=frozenset(),
     )])
 
     # two modules within one namespace but different locations
@@ -42,14 +43,16 @@ def test_classify_local_packages(
             str(get_test_data_path('modules_for_tests')),
             str(get_test_data_path('namespace', 'modules_for_tests')),
         ]),
-        is_binary=False
+        is_binary=False,
+        console_scripts=frozenset(),
     )])
 
     # toplevel module without a package
     assert classifier.classify([empty_module]) == frozenset([LocalPackage(
         name='empty_module',
         paths=frozenset([str(get_test_data_path('empty_module.py'))]),
-        is_binary=False
+        is_binary=False,
+        console_scripts=frozenset(),
     )])
 
 
@@ -77,7 +80,8 @@ def test_classify_pypi_packages(
             }),
             is_binary=False,
             version='3.0.0',
-            bad_paths=frozenset({f'{env_prefix}/bin/lzy_test_project_bin'})
+            bad_paths=frozenset(),
+            console_scripts=frozenset({f'{env_prefix}/bin/lzy_test_project_bin'}),
         ),
     })
 
@@ -130,7 +134,8 @@ def test_classify_local_distribution(
         }),
         is_binary=False,
         version='3.0.0',
-        bad_paths=frozenset({f'{env_prefix}/bin/lzy_test_project_bin'})
+        bad_paths=frozenset(),
+        console_scripts=frozenset({f'{env_prefix}/bin/lzy_test_project_bin'}),
     )
 
     def classify(module) -> Set[BasePackage]:
@@ -174,7 +179,8 @@ def test_classify_editable_distribution(classifier: ModuleClassifier, get_test_d
             paths=frozenset({
                 f'{get_test_data_path()}/lzy_test_project_editable/src/lzy_test_project_editable'
             }),
-            is_binary=False
+            is_binary=False,
+            console_scripts=frozenset(),
         )
     })
 

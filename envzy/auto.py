@@ -2,12 +2,14 @@ from __future__ import annotations
 
 import sys
 from dataclasses import dataclass, field
+from operator import attrgetter
 from logging import getLogger
 from typing import List, Type, TypeVar, Tuple, Union, Sequence
 
-from .base import BaseExplorer, ModulePathsList, PackagesDict
+from .base import BaseExplorer
 from .classify import ModuleClassifier
 from .search import VarsNamespace, get_transitive_namespace_dependencies
+from .spec import ModulePathsList, PackagesDict, EnvironmentSpec
 from .packages import (
     BrokenModules,
     LocalPackage,
@@ -33,8 +35,10 @@ class AutoExplorer(BaseExplorer):
     search_stop_list: Sequence[str] = ()
 
     def get_local_module_paths(self, namespace: VarsNamespace) -> ModulePathsList:
-        packages = self._get_packages(namespace, LocalPackage)
+        packages = self._get_packages(namespace)
+        return self._get_local_module_paths(self._filter(packages, LocalPackage))
 
+    def _get_local_module_paths(self, packages: List[LocalPackage]) -> ModulePathsList:
         filtered: List[LocalPackage] = []
         binary: List[LocalPackage] = []
         nonbinary: List[LocalPackage] = []
@@ -87,11 +91,13 @@ class AutoExplorer(BaseExplorer):
                 nonbinary
             )
 
-        return list(set().union(*(p.paths for p in nonbinary)))
+        return sorted(set().union(*(p.paths for p in nonbinary)))
 
     def get_pypi_packages(self, namespace: VarsNamespace) -> PackagesDict:
-        packages = self._get_packages(namespace, PypiDistribution)
+        packages = self._get_packages(namespace)
+        return self._get_pypi_packages(self._filter(packages, PypiDistribution))
 
+    def _get_pypi_packages(self, packages: List[PypiDistribution]) -> PackagesDict:
         overrided: List[PypiDistribution] = []
         bad_platform: List[PypiDistribution] = []
         good: List[PypiDistribution] = []
@@ -129,11 +135,34 @@ class AutoExplorer(BaseExplorer):
             **self.additional_pypi_packages
         }
 
+    def get_environment_spec(self, namespace: VarsNamespace) -> EnvironmentSpec:
+        packages = self._get_packages(namespace)
+
+        local_packages = self._filter(packages, LocalPackage)
+        local_module_paths = self._get_local_module_paths(local_packages)
+        console_scripts = self._get_console_scripts(local_packages)
+
+        pypi_packages = self._get_pypi_packages(self._filter(packages, PypiDistribution))
+
+        return EnvironmentSpec(
+            packages=sorted(packages, key=attrgetter('name')),
+            local_module_paths=sorted(local_module_paths),
+            console_scripts=sorted(console_scripts),
+            pypi_packages=pypi_packages
+        )
+
+    def _get_console_scripts(self, packages: List[LocalPackage]) -> List[str]:
+        return list(
+            frozenset().union(*(p.console_scripts for p in packages))
+        )
+
+    def _filter(self, packages: List[BasePackage], filter_class: Type[P]) -> List[P]:
+        return [p for p in packages if isinstance(p, filter_class)]
+
     def _get_packages(
         self,
         namespace: VarsNamespace,
-        filter_class: Type[P],
-    ) -> List[P]:
+    ) -> List[BasePackage]:
         stop_list = frozenset(self.search_stop_list)
         modules = get_transitive_namespace_dependencies(namespace, stop_list=stop_list)
 
@@ -151,4 +180,4 @@ class AutoExplorer(BaseExplorer):
                 'so these moduels will be omitted: %s', broken
             )
 
-        return [p for p in packages if isinstance(p, filter_class)]
+        return list(packages)

@@ -3,7 +3,9 @@ from __future__ import annotations
 import json
 import os
 import site
+import sys
 from functools import lru_cache
+from pathlib import Path
 from typing import FrozenSet, Set, Dict, cast, Iterable, Tuple, Union, List, Optional
 from types import ModuleType
 
@@ -60,6 +62,8 @@ class ModuleClassifier:
         self.names_to_distributions = get_names_to_distributions()
         self.requirements_to_meta_packages = get_requirements_to_meta_packages()
 
+        self.scripts_directory = Path(sys.prefix).resolve() / 'bin'
+
         self.bad_prefixes = frozenset([
             site.getusersitepackages()
         ]) | set(site.getsitepackages())
@@ -105,6 +109,8 @@ class ModuleClassifier:
             # because we should process such distributions by other properties.
             if not filename:
                 continue
+
+            filename = str(Path(filename).resolve())
 
             # We also not interested in standard modules
             if (
@@ -169,7 +175,7 @@ class ModuleClassifier:
                 have_server_supported_tags=have_server_supported_tags,
             )
 
-        paths, bad_paths = self._get_distribution_paths(distribution)
+        paths, console_scripts, bad_paths = self._get_distribution_paths(distribution)
         is_binary = distribution in binary_distributions
         return LocalDistribution(
             name=distribution.name,
@@ -177,6 +183,7 @@ class ModuleClassifier:
             paths=paths,
             is_binary=is_binary,
             bad_paths=bad_paths,
+            console_scripts=console_scripts,
         )
 
     def _classify_modules_without_distributions(
@@ -218,7 +225,8 @@ class ModuleClassifier:
             package = LocalPackage(
                 name=top_level,
                 paths=frozenset(paths),
-                is_binary=top_level in binary_distributions
+                is_binary=top_level in binary_distributions,
+                console_scripts=frozenset(),
             )
             result.add(package)
 
@@ -394,7 +402,7 @@ class ModuleClassifier:
 
     def _get_distribution_paths(
         self, distribution: Distribution
-    ) -> Tuple[FrozenSet[str], FrozenSet[str]]:
+    ) -> Tuple[FrozenSet[str], FrozenSet[str], FrozenSet[str]]:
         """
         If Distribution files are foo/bar, foo/baz and foo1,
         we want to return {<site-packages>/foo, <site-packages>/foo1}
@@ -402,11 +410,17 @@ class ModuleClassifier:
 
         paths = set()
         bad_paths = set()
+        console_scripts = set()
 
         base_path = distribution.locate_file('').resolve()
 
         for path in distribution.files or ():
             abs_path = distribution.locate_file(path).resolve()
+
+            if self.scripts_directory in abs_path.parents:
+                console_scripts.add(str(abs_path))
+                continue
+
             if base_path not in abs_path.parents:
                 bad_paths.add(str(abs_path))
                 continue
@@ -416,7 +430,7 @@ class ModuleClassifier:
             result_path = base_path / first_part
             paths.add(str(result_path))
 
-        return frozenset(paths), frozenset(bad_paths)
+        return frozenset(paths), frozenset(console_scripts), frozenset(bad_paths)
 
     def _check_module_is_binary(self, module: ModuleType) -> bool:
         loader = getattr(module, '__loader__', None)
