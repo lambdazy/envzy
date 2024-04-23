@@ -124,7 +124,6 @@ class ModuleClassifier:
                 continue
 
             distribution = self.files_to_distributions.get(filename)
-            print(filename, distribution)
             if distribution and not self._check_distribution_is_editable(distribution):
                 distributions.add(distribution)
 
