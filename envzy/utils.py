@@ -214,7 +214,8 @@ def get_requirements_to_meta_packages() -> Dict[str, List[Distribution]]:
 
 def is_wellknown_fake_module(top_level_module_name: str, module_filename: str) -> bool:
     if top_level_module_name == 'torch':
-        if module_filename in ['torch.ops', '_ops.py', '_classes.py']:
+        module_file_basename = os.path.basename(module_filename)
+        if module_file_basename in ['torch.ops', '_ops.py', '_classes.py']:
             return True
     return False
 
